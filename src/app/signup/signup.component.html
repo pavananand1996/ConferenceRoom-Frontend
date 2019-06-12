@@ -1,0 +1,74 @@
+<div class="body1">
+  <div class="row" style="margin-top:90px">
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-4" style="text-align:center">
+      <span style="font-size:30px;color:#fff">Register</span>
+    </div>
+    <div class="col-md-4">
+
+    </div>
+  </div>
+
+  <div class="container" style="margin-top:5px">
+    <div class="d-flex justify-content-center h-100">
+
+
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-4" style="margin-left:-14px">
+
+
+            </div>
+
+            <div class="col-md-4">
+
+            </div>
+          </div>
+
+
+          <!-- <h3 style="text-align: center;color: #232527"> In</h3> -->
+        </div>
+        <div class="card-body">
+          <form name="form" (ngSubmit)="f.form.valid && submit()" #f="ngForm" novalidate>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !name.valid }">
+              <label for="username" style="color:#232527;font-weight:600">E-mail</label>
+              <input type="text" class="form-control" name="user" [(ngModel)]="username" #name="ngModel" required />
+              <div *ngIf="f.touched && !name.valid" class="help-block" style="color: red">E-mail is required</div>
+            </div>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !pwd.valid }">
+              <label for="password" style="color: #232527;font-weight:600">Password</label>
+              <input type="password" class="form-control" name="pass" [(ngModel)]="password" #pwd="ngModel" required />
+              <div *ngIf="f.touched && !pwd.valid" class="help-block" style="color: red">Password is required</div>
+            </div>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !cpwd.valid }">
+              <label for="password" style="color: #232527;font-weight:600">Confirm Password</label>
+              <input type="password" class="form-control" name="cpass" [(ngModel)]="cpassword" #pwd="ngModel"
+                required />
+              <div *ngIf="f.touched && !cpwd.valid" class="help-block" style="color: red">Password is required</div>
+            </div>
+            <div class="form-group">
+              <button [disabled]="!f.form.valid" style="margin-left:140px" class="btn btn-primary">Register</button>
+              <a routerLink="/login"> login Now!</a>
+            </div>
+          </form>
+          <br>
+          <br>
+          <span style="color:red;text-align: center"> {{errorMessage}}</span>
+          <div class="d-flex justify-content-center links">
+            <p style="color:#232527;font-weight: 600">Don't have an account?<a routerLink="/signup">Sign Up</a></p>
+          </div>
+          <div class="d-flex justify-content-center">
+            <a routerLink="/fpw" style="color:#232527;font-weight: 600">Forgot your password?</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br><br><br>
+</div>

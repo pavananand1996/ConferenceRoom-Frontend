@@ -1,0 +1,17 @@
+.btn:focus {
+    box-shadow: 0 0 0 0 rgba(38,143,255,.5) !important;
+}
+.example-chip-list{
+     width:100%;
+}
+.modal-header{
+    border-bottom: 0px solid #dee2e6 !important;
+}
+.checkbox{
+    
+       box-shadow:green !important 
+    
+    
+  
+}
+

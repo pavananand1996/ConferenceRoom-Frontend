@@ -1,0 +1,8 @@
+table {
+    width: 100%;
+  }
+.search{
+  outline:none;
+  border:none;
+  border-bottom:2px solid black;
+}

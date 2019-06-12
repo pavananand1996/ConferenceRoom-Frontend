@@ -1,0 +1,110 @@
+/* Made with love by Mutiullah Samim*/
+
+@import url('https://fonts.googleapis.com/css?family=Numans');
+
+.body1{
+background:linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://www.cmu.edu/cohon-university-center/center-facilities/danforth-conference/danforth_conference_images/CA_SA_Danfoth%20Conference%20Room_2016_3668-min-min.jpg') fixed no-repeat top center;
+background-size: cover;
+background-repeat: no-repeat;
+height: 100%;
+font-family: '"Arial"', sans-serif;
+position: cover;
+overflow-x: hidden
+
+}
+h4{
+    color:white;
+    margin-left: 420px;
+    padding-top: 30px;
+    font-weight: bold italic;
+    text-shadow: 2px 2px 5px #ffffff;
+    font-family: '"Lato"', sans-serif;
+    font-size: 60px;
+}
+.has-error{
+    border-color: red
+}
+.container{
+height: 70%;
+align-content: center;
+}
+
+.card{
+height: 450px;
+margin-top: auto;
+margin-bottom: auto;
+width: 400px;
+background-color:#e1e1e1 !important;
+}
+.card-header{
+    background-color: unset;
+    border-bottom: 0px solid rgba(0,0,0,.125) 
+}
+
+.social_icon span{
+font-size: 60px;
+margin-left: 10px;
+color: #00aee7;
+}
+
+.social_icon span:hover{
+color: white;
+cursor: pointer;
+}
+
+.card-header h3{
+color: white;
+}
+
+.social_icon{
+position: absolute;
+right: 20px;
+top: -45px;
+}
+
+.input-group-prepend span{
+width: 50px;
+background-color: #00aee7;
+color: black;
+border:0 !important;
+}
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+
+}
+.fa fa{
+    background-color: #ffffff;
+}
+.remember{
+color: white;
+}
+
+.remember input
+{
+width: 20px;
+height: 20px;
+margin-left: 15px;
+margin-right: 5px;
+}
+
+.login_btn{
+color: black;
+background-color: #00aee7;
+width: 100px;
+margin-left: px;
+}
+
+.login_btn:hover{
+color: black;
+background-color: white;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}

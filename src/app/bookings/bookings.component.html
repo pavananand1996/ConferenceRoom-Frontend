@@ -1,0 +1,226 @@
+<div class="container" style="margin-top: 10px">
+  <mat-card>
+    <form novalidate [formGroup]="slotsForm">
+      <div class="row">
+
+        <div class="col-md-2">
+          <label style="font-weight: 500">
+            Date :<span style="color: red">*</span>
+          </label>
+          <div class="form-group">
+            <div class="input-group">
+              <input class="form-control" placeholder="yyyy-mm-dd" name="modelDate" [(ngModel)]="modelDate"
+                ngbDatepicker #d="ngbDatepicker" [minDate]="minDate" formControlName="modelDate">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label style="font-weight: 500">
+            TimeZone :<span style="color: red">*</span>
+          </label>
+          <div class="form-group">
+            <div class="input-group">
+              <select class="form-control" (change)="selectTimezone($event)" name="timeZoneValue"
+                formControlName="timeZoneValue">
+                <option value="TimeZone" [selected]="'TimeZone'" disabled>TimeZone</option>
+                <option value="IST">IST</option>
+                <option value="EST">EST</option>
+                <option value="MST">MST</option>
+                <option value="PST">PST</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label style="font-weight: 500">
+            Start Time:<span style="color: red">*</span>
+          </label>
+          <div class="input-group">
+            <input type="text" class="form-control square" placeholder="HH:MM" name="sTime" formControlName="sTime"
+              (keyup)="enterdTime($event,'start')">
+            <div class="input-group-append">
+              <span>
+                <select class="form-control square" formControlName="meridianValue" name="meridianValue"
+                  (change)="Meridian($event,'start')">
+                  <option value="AM" [selected]="'AM'">AM</option>
+                  <option value="PM">PM</option>
+                </select>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label style="font-weight: 500">
+            End Time:<span style="color: red">*</span>
+          </label>
+          <div class="input-group">
+            <input type="text" class="form-control square" placeholder="HH:MM" name="eTime" formControlName="eTime"
+              (keyup)="enterdTime($event,'end')">
+            <div class="input-group-append">
+              <span>
+                <select class="form-control square" formControlName="endMeridianValue" name="endMeridianValue"
+                  (change)="Meridian($event,'end')">
+                  <option value="AM" [selected]="'AM'">AM</option>
+                  <option value="PM">PM</option>
+                </select>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label style="font-weight: 500">
+            Location :<span style="color: red">*</span>
+          </label>
+          <div class="form-group">
+            <div class="input-group">
+              <select class="form-control" (change)="selectLocation($event)" name="Location" formControlName="Location">
+                <option disabled value="Location" [selected]="'Location'">Location</option>
+                <option value="Mcity">MCity</option>
+                <option value="Mheights">MHeights</option>
+                <option value="Mvalley">MValley</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <label style="font-weight: 500">
+            Level :<span style="color: red">*</span>
+          </label>
+          <div class="form-group">
+            <div class="input-group">
+              <select class="form-control" (change)="selectFloor($event)" name="floorValue"
+                formControlName="floorValue">
+                <option disabled value="Level" [selected]="'Level'">Level</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <mat-card-actions>
+      <div class="row">
+        <div class="col-md-10">
+
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-primary" [disabled]='!slotsForm.valid'
+            style="background-color: #00aae7 !important;border-color: #00aae7 !important" (click)="showSlots()">Show
+            Slots</button>
+        </div>
+
+      </div>
+    </mat-card-actions>
+  </mat-card>
+  <br>
+  <mat-card *ngIf="slotShow">
+    <div>
+      <div class="row">
+        <div class="col-md-4" *ngFor="let roomData of conferenceRoooms;let i=index" style="margin-top:20px">
+          <mat-card>
+            <mat-card-content>
+              <div class="row">
+                <div class="col-md-8">
+                  <h6 style="font-size:1.1em;font-weight: bolder">{{roomData.roomName}}</h6>
+                </div>
+                <div class="col-md-2">
+                  <i class="fa fa-check-circle" aria-hidden="true"
+                    style="font-size: 20px;color:rgb(22, 152, 22);cursor: pointer;"
+                    (click)="open(content,roomData.roomName)"></i>
+                </div>
+                <div class="col-md-2">
+                  <i class="fa fa-info-circle" aria-hidden="true" style="font-size: 20px;color:#f9c423;cursor: pointer;"
+                    (click)="openInfo(contentInfo,roomData.roomName) " matTooltip="tip"></i>
+
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+    </div>
+  </mat-card>
+  <mat-card *ngIf="noRooms">
+    <div>
+      <h1>No rooms are available...!</h1>
+
+    </div>
+  </mat-card>
+  <br><br><br><br><br><br><br><br>
+</div>
+<ng-template #content let-modal>
+  <div class=" modal-header" *ngIf="modalData">
+    <h4 class="modal-title" id="modal-basic-title">{{modalData.name}}</h4>
+    <i class="fa fa-times" aria-hidden="true" (click)="closeModal()" style="margin-top: 10px"></i>
+  </div>
+  <div class="modal-body">
+    <mat-form-field class="example-chip-list">
+      <mat-chip-list #chipList aria-label="Fruit selection">
+        <mat-chip *ngFor="let attendee of attendees" [selectable]="selectable" [removable]="removable"
+          (removed)="remove(attendee)">
+          {{attendee.name}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="Attende Email..." [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="add($event)">
+      </mat-chip-list>
+    </mat-form-field>
+    <div class="form-group">
+      <label for="exampleFormControlTextarea1">Agenda</label>
+      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" [(ngModel)]="agenda"></textarea>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="saveConfRoomData()">Book Now</button>
+  </div>
+
+
+
+</ng-template>
+
+<ng-template #contentInfo let-modal>
+  <div class=" modal-header" *ngIf="infoData">
+    <h4 class="modal-title" id="modal-basic-title">{{infoData.roomName}}</h4>
+    <i class="fa fa-times" aria-hidden="true" (click)="closeModal()" style="margin-top: 10px"></i>
+  </div>
+  <div class="modal-body">
+    <div class="check row">
+
+
+      <div class="col-md-4">
+        <span style="font-size:1.1em;font-weight: bolder">board</span>&nbsp;
+
+        <i class="fa fa-check-circle" *ngIf="infoData.facilities[0].board" aria-hidden="true"
+          style="font-size: 20px;color:rgb(22, 152, 22);"></i>
+        <i class="fa fa-times" *ngIf="!infoData.facilities[0].board" aria-hidden="true"
+          style="font-size: 20px;color:red;"></i>
+      </div>
+      <div class="col-md-4">
+        <span style="font-size:1.1em;font-weight: bolder">projector</span>&nbsp;&nbsp;&nbsp;
+        <i class="fa fa-check-circle" *ngIf="infoData.facilities[0].projector" aria-hidden="true"
+          style="font-size: 20px;color:rgb(22, 152, 22);"></i>
+        <i class="fa fa-times" *ngIf="!infoData.facilities[0].projector" aria-hidden="true"
+          style="font-size: 20px;color:red;"></i>
+      </div>
+      <div class="col-md-4">
+        <span style="font-size:1.1em;font-weight: bolder">Capacity :
+          {{infoData.facilities[0].capacity}}</span>&nbsp;&nbsp;&nbsp;
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+</ng-template>
