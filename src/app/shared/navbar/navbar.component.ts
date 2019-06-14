@@ -8,8 +8,10 @@ import { Router } from '@angular/router';
     styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+    userName = localStorage.getItem('userName');
+    constructor(private _router: Router) {
 
-    constructor(private _router: Router) { }
+    }
 
     ngOnInit() {
     }

@@ -46,6 +46,7 @@ export class BookingsComponent implements OnInit {
   endTime: any;
   sMedridian: any;
   eMedridian: any;
+  roomName: any;
   constructor(private modalService: NgbModal,
     private _dateParser: NgbDateParserFormatter,
     private calendar: NgbCalendar,
@@ -75,7 +76,8 @@ export class BookingsComponent implements OnInit {
 
 
   open(content, roomId) {
-    console.log(roomId)
+    console.log(roomId);
+    this.roomName = roomId
     this.modelRef = this.modalService.open(content, { centered: true });
     for (let i = 0; i < this.conferenceRoooms.length; i++) {
       if (roomId == this.conferenceRoooms[i].roomName) {
@@ -86,7 +88,8 @@ export class BookingsComponent implements OnInit {
   }
 
   openInfo(contentInfo, roomId) {
-    console.log(roomId)
+    console.log("roomId", roomId)
+    this.roomName = roomId
     this.modelRef = this.modalService.open(contentInfo, { centered: true });
     for (let i = 0; i < this.conferenceRoooms.length; i++) {
       if (roomId == this.conferenceRoooms[i].roomName) {
@@ -128,11 +131,48 @@ export class BookingsComponent implements OnInit {
 
   showSlots() {
     console.log('function called', this.slotsForm.value)
-    let slots = this.slotsForm.value
+    let slots = this.slotsForm.value;
+    let date = this.modelDate.year + '/' + this.modelDate.month + '/' + this.modelDate.day;
+    var stime = this.startTime
+    var hours = Number(stime.match(/^(\d+)/)[1]);
+    var minutes = Number(stime.match(/:(\d+)/)[1]);
+    var AMPM = this.sMedridian;
+    if (AMPM == "PM" && hours < 12) hours = hours + 12;
+    if (AMPM == "AM" && hours == 12) hours = hours - 12;
+    var sHours = hours.toString();
+    var sMinutes = minutes.toString();
+    if (hours < 10) sHours = "0" + sHours;
+    if (minutes < 10) sMinutes = "0" + sMinutes;
+    console.log(sHours + ":" + sMinutes);
+    this.startTime = sHours + ":" + sMinutes;
+    //end time 
+
+    var etime = this.endTime
+    var ehours = Number(etime.match(/^(\d+)/)[1]);
+    var eminutes = Number(etime.match(/:(\d+)/)[1]);
+    var eAMPM = this.eMedridian;
+    if (eAMPM == "PM" && ehours < 12) ehours = ehours + 12;
+    if (eAMPM == "AM" && ehours == 12) ehours = ehours - 12;
+    var eHours = ehours.toString();
+    var eMinutes = minutes.toString();
+    if (ehours < 10) eHours = "0" + eHours;
+    if (eminutes < 10) eMinutes = "0" + eMinutes;
+    console.log(eHours + ":" + eMinutes);
+    this.endTime = eHours + ":" + eMinutes;
+
+
     let obj = {
-      'location': slots.Location,
-      'floor': slots.floorValue
+      'hostName': localStorage.getItem('userName'),
+      'roomName': this.roomName,
+      'hostEmail': localStorage.getItem('email'),
+      'Date': date,
+      'location': this.location,
+      'floor': this.floorValue,
+      'timeZone': this.timeZoneValue,
+      'startTime': this.startTime,
+      'endTime': this.endTime
     }
+    console.log("boj", obj);
     this.rest.searchSlots(obj).subscribe((result) => {
       if (result.status) {
         console.log(result.rooms)
@@ -181,7 +221,7 @@ export class BookingsComponent implements OnInit {
 
     let data = {
       'hostName': localStorage.getItem('userName'),
-      'roomName': 'room name',
+      'roomName': this.roomName,
       'hostEmail': localStorage.getItem('email'),
       'attendees': this.attendees,
       'Agenda': this.agenda,

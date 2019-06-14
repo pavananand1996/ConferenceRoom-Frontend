@@ -30,7 +30,7 @@ export class RestService {
   }
 
   searchSlots(data): Observable<any> {
-    return this.http.post(this.endpoint + '/users/search?floor=' + data.floor + '&location=' + data.location, this.httpOptions).pipe(
+    return this.http.post(this.endpoint + '/users/search?floor=' + data.floor + '&location=' + data.location + '&Date=' + data.Date + '&startTime=' + data.startTime + '&endTime=' + data.endTime, this.httpOptions).pipe(
       map(this.extractData))
   }
 
@@ -43,6 +43,18 @@ export class RestService {
     return this.http.post(this.endpoint + '/users/roomBooking', JSON.stringify(data), this.httpOptions).pipe(
       map(this.extractData))
   }
+
+  history(data): Observable<any> {
+    return this.http.get(this.endpoint + '/users/history?user=' + data).pipe(
+      map(this.extractData))
+  }
+
+  cancelBookings(data): Observable<any> {
+    return this.http.get(this.endpoint + '/users/cancelBooking?id=' + data).pipe(
+      map(this.extractData))
+  }
+
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 

@@ -1,19 +1,43 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbCalendar, NgbDateParserFormatter, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { ViewChild } from '@angular/core';
 import { S } from '@angular/cdk/keycodes';
+import { RestService } from '../services/rest.service';
+import swal from 'sweetalert2'
+import { Router } from '@angular/router';
 
+export interface PeriodicElement {
 
+  Date: string;
+  Roomname: string;
+  Agenda: string;
+  StartTime: string;
+  EndTime: string;
+  Level: number;
+  AttendeesCount: number;
+  Action: any
+
+}
+var ELEMENT_DATA: PeriodicElement[] = []
 @Component({
   selector: 'app-status',
   templateUrl: './status.component.html',
   styleUrls: ['./status.component.css']
 })
+
+
 export class StatusComponent implements OnInit {
   closeResult: string;
-  displayedColumns: string[] = ['Id', 'Date', 'Roomname', 'Agenda', 'Time', 'Level'];
+  historyData: any = [];
+  history: boolean = false;
+  displayedColumns: string[] = ['Date', 'Roomname', 'Agenda', 'StartTime', 'EndTime', 'Level', 'AttendeesCount', 'Action'];
+
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  minDate: any;
+  modelRef: NgbModalRef;
+  id: any;
+  loader: boolean = true;
 
   applyFilter(filterValue: string) {
     {
@@ -23,7 +47,45 @@ export class StatusComponent implements OnInit {
 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal,
+    private rest: RestService,
+    private calendar: NgbCalendar,
+    private _dateParser: NgbDateParserFormatter,
+    private router: Router
+  ) {
+    ELEMENT_DATA = [];
+    setTimeout(() => {
+      this.loader = false;
+
+    }, 1000);
+    this.loader = true;
+    let user = localStorage.getItem('userName')
+    this.rest.history(user).subscribe((res) => {
+
+      console.log("history", res.data);
+      if (res.data.length != 0) {
+        //console.log("insideS")
+        this.history = true;
+      }
+      let history = [];
+      history = res.data;
+      history.forEach(element => {
+        ELEMENT_DATA.push({
+          'Date': element.Date,
+          'Roomname': element.roomName,
+          'Agenda': element.Agenda,
+          'StartTime': element.startTime,
+          'EndTime': element.endTime,
+          'Level': element.floor,
+          'AttendeesCount': element.attendees.length,
+          'Action': element._id
+        })
+      });
+
+
+      this.historyData = ELEMENT_DATA;
+    })
+  }
 
   open(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -47,32 +109,68 @@ export class StatusComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
+    let DateValue = this._dateParser.format(this.calendar.getToday());
+    let trimmedDate = DateValue.split("-")
+    this.minDate = trimmedDate[0] + '/' + trimmedDate[1] + '/' + trimmedDate[2]
+    console.log(this.minDate)
+  }
 
+  delete() {
+    this.rest.cancelBookings(this.id).subscribe((res) => {
+      if (res) {
+        this.modelRef.close();
+        let user = localStorage.getItem('userName')
+        this.rest.history(user).subscribe((res) => {
+
+          console.log("history", res.data);
+          if (res.data.length != 0) {
+            //console.log("insideS")
+            this.history = true;
+          }
+          let history = [];
+          history = res.data;
+          history.forEach(element => {
+            ELEMENT_DATA.push({
+              'Date': element.Date,
+              'Roomname': element.roomName,
+              'Agenda': element.Agenda,
+              'StartTime': element.startTime,
+              'EndTime': element.endTime,
+              'Level': element.floor,
+              'AttendeesCount': element.attendees.length,
+              'Action': element._id
+            })
+          });
+
+
+          this.historyData = ELEMENT_DATA;
+
+          console.log("********************")
+          this.router.navigateByUrl('/dashboard', { skipLocationChange: true }).then(() =>
+            this.router.navigate(["/dashboard/history"]));
+          //this.router.navigateByUrl("/dashboard/history");
+        })
+        swal.fire("", "Cancelled Successfully!", "success");
+
+      } else {
+        this.modelRef.close();
+        swal.fire("", "Please try again.", "error")
+      }
+    })
+  }
+
+  openSm(contentConfirm, id) {
+    console.log(id);
+    this.id = id;
+    this.modelRef = this.modalService.open(contentConfirm);
+
+  }
+  closeModal() {
+    this.modelRef.close()
   }
 
 }
-export interface PeriodicElement {
-  Id: number;
-  Date: string;
-  Roomname: string;
-  Agenda: string;
-  Time: string;
-  Level: number;
-}
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  { Id: 1, Date: '10/05/2019', Roomname: 'conference 1', Agenda: 'agenda1', Time: '07:30pm', Level: 0 },
-  { Id: 2, Date: '15/02/2018', Roomname: 'conference 2', Agenda: 'agenda2', Time: '09:30am', Level: 1 },
-  { Id: 3, Date: '30/05/2018', Roomname: 'conference 3', Agenda: 'agenda3', Time: '10:30am', Level: 2 },
-  { Id: 4, Date: '25/01/2019', Roomname: 'conference 4', Agenda: 'agenda4', Time: '12:30pm', Level: 0 },
-  { Id: 5, Date: '10/02/2019', Roomname: 'conference 5', Agenda: 'agenda5', Time: '06:30pm', Level: 1 },
-  { Id: 6, Date: '06/03/2019', Roomname: 'conference 6', Agenda: 'agenda6', Time: '10:30pm', Level: 2 },
-  { Id: 7, Date: '15/04/2019', Roomname: 'conference 7', Agenda: 'agenda7', Time: '12:30pm', Level: 0 },
-  { Id: 8, Date: '07/05/2019', Roomname: 'conference 8', Agenda: 'agenda8', Time: '08:30pm', Level: 1 },
-
-
-
-];
 
 
 

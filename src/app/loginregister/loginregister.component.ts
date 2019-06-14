@@ -30,7 +30,8 @@ export class LoginregisterComponent implements OnInit {
     this.apis.login(input).subscribe((response) => {
       if (response.success) {
         localStorage.setItem('userName', this.username);
-        localStorage.setItem('email', response.email)
+        localStorage.setItem('email', response.email);
+        console.log("success")
         this._router.navigateByUrl('/dashboard/bookings');
       } else {
         this.errorMessage = 'Invalid username or password';

@@ -5,6 +5,7 @@ import { BookingsComponent } from './bookings/bookings.component';
 import { StatusComponent } from './status/status.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignupComponent } from './signup/signup.component';
+import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,7 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'bookings',
@@ -34,8 +36,7 @@ export const routes: Routes = [
       }
 
     ]
-  },
-
+  }
 
 ];
 

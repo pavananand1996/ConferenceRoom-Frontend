@@ -13,11 +13,14 @@
         <a class="nav-link" [routerLink]="['/dashboard/bookings']">Bookings<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link" [routerLink]="['/dashboard/history']">History</a>
+        <a class="nav-link" [routerLink]="['/dashboard/history']">My Bookings</a>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <h4 style=color:#ffffff>satya </h4>
+    <form class="form-inline my-2 my-lg-0" style="margin-right: 4%;">
+      <img
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMrYqax_J2xys7O57n0QcYyBXR-AGNwPGBmaw6j-xJXHyFwAu5"
+        style="max-width: 30px;max-height: 30px;border-radius: 30px;">
+      <h4 style="color:#ffffff; padding: 1px 10px;">{{userName}} </h4>
       <i class="fa fa-sign-out" style="font-size:24px;color:#ffffff" (click)="logout()"></i>
     </form>
   </div>

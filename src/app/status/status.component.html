@@ -1,52 +1,127 @@
 <br>
-<div>
+<!----<div>
   <input class="search" (keyup)="applyFilter($event.target.value)" placeholder="search">
+</div>-->
+<div *ngIf="history">
+  <br><br>
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="historyData">
+
+
+      <!----<ng-container matColumnDef="Id">
+        <th mat-header-cell *matHeaderCellDef> Id </th>
+        <td mat-cell *matCellDef="let element"> {{element.Id}} </td>
+      </ng-container>--.
+
+      <! Position Column -->
+
+      <ng-container matColumnDef="Date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.Date}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="Roomname">
+        <th mat-header-cell *matHeaderCellDef> Roomname </th>
+        <td mat-cell *matCellDef="let element"> {{element.Roomname}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="Agenda">
+        <th mat-header-cell *matHeaderCellDef> Agenda </th>
+        <td mat-cell *matCellDef="let element"> {{element.Agenda}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="StartTime">
+        <th mat-header-cell *matHeaderCellDef> StartTime</th>
+        <td mat-cell *matCellDef="let element"> {{element.StartTime}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="EndTime">
+        <th mat-header-cell *matHeaderCellDef> EndTime</th>
+        <td mat-cell *matCellDef="let element"> {{element.EndTime}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Level">
+        <th mat-header-cell *matHeaderCellDef> Level</th>
+        <td mat-cell *matCellDef="let element"> {{element.Level}} </td>
+      </ng-container>
+      <ng-container matColumnDef="AttendeesCount">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center"> AttendeesCount</th>
+        <td mat-cell *matCellDef="let element" style="text-align: center"> {{element.AttendeesCount}} </td>
+      </ng-container>
+      <ng-container matColumnDef="Action">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center"> Action</th>
+        <td mat-cell *matCellDef="let element" style="text-align: center">
+          <button type="button" class="btn btn-danger" style="font-size:14px"
+            *ngIf="(element.Date>=minDate);else disabledState"
+            (click)="openSm(contentConfirm,element.Action)">Cancel</button>
+        </td>
+        <ng-template #disabledState>
+          <button type="button" class="btn btn-danger" style="font-size:14px" [disabled]="true">Cancel</button>
+        </ng-template>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[3, 6, 9]" showFirstLastButtons></mat-paginator>
+  </div>
 </div>
-<br><br>
-<div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource">
+<div *ngIf="!history" class="text-center" style="margin: auto;top: 50%;padding:50px 0;left: 50%;">
+  <span *ngIf="!loader">
+    <i class="fa fa-meh-o" style="color:#00aae7;font-size:50px"></i>
 
-
-    <ng-container matColumnDef="Id">
-      <th mat-header-cell *matHeaderCellDef> Id </th>
-      <td mat-cell *matCellDef="let element"> {{element.Id}} </td>
-    </ng-container>
-
-    <!-- Position Column -->
-    <ng-container matColumnDef="Date">
-      <th mat-header-cell *matHeaderCellDef> Date </th>
-      <td mat-cell *matCellDef="let element"> {{element.Date}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="Roomname">
-      <th mat-header-cell *matHeaderCellDef> Roomname </th>
-      <td mat-cell *matCellDef="let element"> {{element.Roomname}} </td>
-    </ng-container>
-
-    <!-- Weight Column -->
-    <ng-container matColumnDef="Agenda">
-      <th mat-header-cell *matHeaderCellDef> Agenda </th>
-      <td mat-cell *matCellDef="let element"> {{element.Agenda}} </td>
-    </ng-container>
-
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="Time">
-      <th mat-header-cell *matHeaderCellDef> Time</th>
-      <td mat-cell *matCellDef="let element"> {{element.Time}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="Level">
-      <th mat-header-cell *matHeaderCellDef> Level</th>
-      <td mat-cell *matCellDef="let element"> {{element.Level}} </td>
-    </ng-container>
-
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-
-  <mat-paginator [pageSizeOptions]="[3, 6, 9]" showFirstLastButtons></mat-paginator>
+    <div style="font-size:22px;margin-top:10px">
+      You have no booking history yet...!
+    </div>
+  </span>
+  <div *ngIf="loader" class="spinner-border"></div>
 </div>
-
 <br><br><br><br><br><br>
+
+<ng-template #contentConfirm let-modal>
+  <!-- <div class="modal-header">
+    <div class="row" style="float:right">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+
+  </div> -->
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-2">
+
+      </div>
+      <div class="col-md-8" style="font-weight: bold;font-size: 22px;">
+        Are you sure want to Cancel?
+      </div>
+      <div class="col-md-2">
+
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-2">
+
+      </div>
+      <div class="col-md-4" style="margin-left: 49px">
+        <button type="button" class="btn btn-success">
+          <i class="fa fa-check" aria-hidden="true" (click)="delete()"></i>
+        </button>
+      </div>
+
+      <div class="col-md-4">
+        <button type="button" class="btn btn-danger">
+          <i class="fa fa-times" aria-hidden="true" (click)="closeModal()"></i>
+        </button>
+      </div>
+
+      <div class="col-md-2">
+
+      </div>
+    </div>
+  </div>
+
+</ng-template>
